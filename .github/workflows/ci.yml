@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12']
 
     steps:
       - name: Checkout repository
@@ -50,7 +50,7 @@ jobs:
           pytest -q
 
       - name: Build Docker image
-        if: matrix.python-version == '3.9' # build Docker image only once for Python 3.9
+        if: matrix.python-version == '3.10' # build Docker image only once for Python 3.9
         # Use Docker Build action which works on GitHub hosted runners
         uses: docker/build-push-action@v4
         with:
