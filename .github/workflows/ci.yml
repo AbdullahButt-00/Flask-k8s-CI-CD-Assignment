@@ -1,0 +1,59 @@
+name: CI
+
+# trigger on push to any branch (assignment requires pushes to any branch)
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['develop', 'main']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+        # Set up each Python version from the matrix
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: |
+          flake8 .
+
+      - name: Run pytest
+        run: |
+          pytest -q
+
+      - name: Build Docker image
+        if: matrix.python-version == '3.10' # build Docker image only once for Python 3.9
+        # Use Docker Build action which works on GitHub hosted runners
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false        # we do not push to any registry in this assignment
+          tags: flask-app:latest
