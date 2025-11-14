@@ -1,30 +1,52 @@
-name: CI Pipeline
+name: CI
 
+# trigger on push to any branch (assignment requires pushes to any branch)
 on:
   push:
-    branches:
-      - '**'
+    branches: ['**']
   pull_request:
-    branches:
-      - '**'
+    branches: ['develop', 'main']
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: read
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run placeholder test
-        run: echo "✅ CI workflow is working!"
+      - name: Lint with flake8
+        run: |
+          flake8 .
+
+      - name: Run pytest
+        run: |
+          pytest -q
+
+      - name: Build Docker image
+        # Use Docker Build action which works on GitHub hosted runners
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false        # we do not push to any registry in this assignment
+          tags: flask-app:latest
