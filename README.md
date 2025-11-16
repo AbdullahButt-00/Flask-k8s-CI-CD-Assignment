@@ -271,18 +271,17 @@ ports:
 
 ```
 .
-├── app.py                      # Flask application
-├── requirements.txt            # Python dependencies
-├── Dockerfile                  # Multi-stage Docker build
-├── Jenkinsfile                 # Jenkins pipeline definition
-├── kubernetes/
-│   ├── deployment.yaml         # Kubernetes Deployment manifest
-│   └── service.yaml            # Kubernetes Service manifest
-├── .github/
-│   └── workflows/
-│       └── ci.yml             # GitHub Actions CI workflow
-├── tests/                      # Unit tests
-└── README.md                   # This file
+├── app.py
+├── Dockerfile
+├── dummy.txt
+├── Jenkinsfile
+├── kubernetes
+│   ├── deployment.yaml
+│   └── service.yaml
+├── README.md
+├── requirements.txt
+├── test_utils.py
+└── utils.py
 ```
 
 ## Monitoring and Troubleshooting
