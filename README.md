@@ -335,6 +335,6 @@ This project is created for educational purposes as part of the Cloud MLOps cour
 
 ## Acknowledgments
 
-- Course: Cloud MLOps (BS AI)
+- Course: MLOps
 - Assignment: End-to-End CI/CD Pipeline
 - Tools: Git, GitHub Actions, Jenkins, Docker, Kubernetes (minikube)
