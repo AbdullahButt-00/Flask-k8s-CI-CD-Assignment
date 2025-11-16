@@ -325,8 +325,9 @@ kubectl describe service flask-service
 
 ## Contributors
 
-- **Abdullah Butt** - Developer (Repository: AbdullahButt-00)
-- **Immad Shah** - Admin
+- **Abdullah Butt** - Admin
+- **Immad Shah** - Developer
+- **Soban Athar** - Developer
 
 ## License
 
